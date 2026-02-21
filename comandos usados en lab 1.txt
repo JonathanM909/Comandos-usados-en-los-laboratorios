@@ -1,0 +1,37 @@
+Jonathan Mejia 2025-2173
+So3 
+Profesor: Onel
+
+Comandos usados practica 1
+============================================
+Comandos usados practica 2
+Ip a
+Ip route
+Nmtui
+Ping -c 4 8.8.8.8
+============================================
+Comandos usados practica 3
+sudo adduser Miguel
+sudo usermod -aG sudo miguel
+groups miguel
+sudo groupadd guest
+sudo adduser invitado
+sudo usermod -aG guest invitado
+groups invitado
+sudo deluser --remove-home invitado
+sudo groupdel guest
+cat /etc/passwd
+cat /etc/group
+============================================
+Comandos usados practica 4	
+mkdir materia
+touch materia/estudiante.txt
+vi materia/estudiante.txt
+chmod 700 materia/estudiante.txt
+chmod 070 materia/estudiante.txt
+mkdir materia2
+cp materia/estudiante.txt materia2/
+rm -r materia
+ls
+============================================
+
