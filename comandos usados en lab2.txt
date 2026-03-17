@@ -1,5 +1,4 @@
-Comandos usados en la practica 1-
-/
+Comandos usados practica 1
 sudo apt update → actualiza la lista de paquetes disponibles en los repositorios
 sudo apt upgrade -y → actualiza todos los paquetes instalados del sistema automáticamente
 cat /etc/apt/sources.list → muestra los repositorios configurados en el sistema
@@ -8,10 +7,10 @@ apt search bashtop → busca el programa bashtop en los repositorios
 sudo apt install bashtop → instala el programa bashtop en el sistema
 bashtop → ejecuta el monitor de recursos del sistema
 sudo apt purge bashtop → desinstala bashtop eliminando también sus archivos de configuración
-sudo apt autoremove → elimina dependencias que ya no son necesarias/
+sudo apt autoremove → elimina dependencias que ya no son necesarias
+============================================
 
-Comandos usados en la practica 2-
-/
+Comandos usados practica 2
 crontab -e → abre el editor para programar tareas automáticas
 0 23 * * * sudo apt update && sudo apt upgrade -y → programa actualización diaria del sistema a las 11 PM
 0 3 * * 0 sudo reboot → programa reinicio automático los domingos a las 3 AM
@@ -19,10 +18,10 @@ sudo apt install at → instala la herramienta para programar tareas puntuales
 sudo systemctl start atd → inicia el servicio de ejecución de tareas "at"
 ls /tmp → muestra el contenido actual de la carpeta temporal
 echo "rm -rf /tmp/*" | at now + 1 minute → programa la eliminación del contenido de /tmp en 1 minuto
-ls /tmp → verifica el contenido de /tmp después de la ejecución/
+ls /tmp → verifica el contenido de /tmp después de la ejecución
+============================================
 
-Comandos usados en la practica 3-
-/
+Comandos usados practica 3
 lsblk → muestra los discos y particiones disponibles en el sistema
 sudo fdisk /dev/sdb → permite crear o modificar particiones en el disco sdb
 n → crea una nueva partición dentro de fdisk
@@ -40,3 +39,4 @@ cd / → vuelve al directorio raíz
 sudo umount /dev/sdb1 → desmonta la partición del sistema
 sudo mount /dev/sdb1 /mnt → monta la partición en el directorio /mnt
 ls /mnt → muestra el contenido del disco montado en /mnt
+============================================
