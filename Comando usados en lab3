@@ -1,0 +1,35 @@
+Comandos usados practica 1
+sudo nano /etc/default/grub: Editar menú de arranque.
+
+sudo update-grub: Aplicar cambios del menú.
+
+rw init=/bin/bash: Iniciar sistema como root desde GRUB.
+
+passwd root: Cambiar contraseña de administrador.
+============================================
+
+Comandos usados practica 2
+nano [archivo.sh]: Crear o editar script.
+
+chmod +x [archivo.sh]: Dar permiso de ejecución.
+
+./[archivo.sh]: Ejecutar el script.
+
+tar -czvf: Crear comprimido de respaldo.
+
+read -p: Pedir y guardar texto del usuario.
+
+ifconfig > [archivo.txt]: Guardar datos de red en un documento.
+============================================
+
+Comandos usados practica 3
+ip a: Ver dirección IP en Linux.
+
+sudo systemctl enable --now ssh: Encender servicio SSH permanentemente.
+
+ssh-keygen -t ed25519: Generar llaves de seguridad en Windows.
+
+type [llave] | ssh [usuario@ip] "...": Copiar llave pública al servidor Linux.
+
+ssh [usuario@ip]: Conectarse remotamente a Linux.
+============================================
