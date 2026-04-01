@@ -1,0 +1,31 @@
+Comandos usados practica 1
+sudo apt update && sudo apt install apache2 -y
+sudo a2dissite 000-default.conf
+sudo mkdir -p /var/www/holamundo
+echo "<h1>Hola Mundo - Puerto 80</h1>" | sudo tee /var/www/holamundo/index.html
+echo -e "<VirtualHost *:80>\n    DocumentRoot /var/www/holamundo\n</VirtualHost>" | sudo tee /etc/apache2/sites-available/holamundo.conf
+sudo mkdir -p /var/www/datos
+echo "<h1>Jonathan Miguel Mejia Rochet - 2025-2173</h1>" | sudo tee /var/www/datos/index.html
+echo -e "<VirtualHost *:8080>\n    DocumentRoot /var/www/datos\n</VirtualHost>" | sudo tee /etc/apache2/sites-available/datos.conf
+sudo sed -i '/Listen 80/a Listen 8080' /etc/apache2/ports.conf
+sudo a2ensite holamundo.conf
+sudo a2ensite datos.conf
+sudo systemctl restart apache2
+============================================
+
+Comandos usados practica 2
+sudo apt install postfix mailutils -y
+sudo postconf -e "myhostname = kali.local"
+sudo systemctl restart postfix
+echo "Jonathan Miguel Mejia Rochet - 2025-2173" | mail -s "MambruSeFueALaGuerra" os3conadrian@gmail.com
+sudo journalctl -u postfix -n 10 --no-pager
+============================================
+
+Comandos usados practica 3
+sudo apt install cups printer-driver-cups-pdf -y
+sudo usermod -aG lpadmin $USER
+sudo cupsctl --remote-admin --remote-any --share-printers
+sudo lpadmin -p PDF -o printer-is-shared=true
+sudo systemctl restart cups
+ls -l /var/spool/cups-pdf/ANONYMOUS/
+============================================
