@@ -1,0 +1,79 @@
+OJO- en esta practica se usaron varias veces los mismos comandos por el uuso de dos VM y solo se puso aqui la variante exacta de la VM 1
+
+Comandos usados practica 1
+sudo apt update && sudo apt install rsync sshpass -y
+mkdir -p ~/sincronizacion
+touch ~/sincronizacion/archivo_{1..100}.txt
+echo '#!/bin/bash' > ~/script_rsync.sh
+echo 'sshpass -p "1234" rsync -avz -e "ssh -o StrictHostKeyChecking=no" ~/sincronizacion/ jonathan@192.168.1.107:~/sincronizacion_destino/' >> ~/script_rsync.sh
+chmod +x ~/script_rsync.sh
+(crontab -l 2>/dev/null; echo "* * * * * ~/script_rsync.sh") | crontab -
+touch ~/sincronizacion/Prueba_Final_Crontab.txt
+ls -l ~/sincronizacion_destino/
+ls ~/sincronizacion_destino/ | wc -l
+ls ~/sincronizacion_destino/Prueba_Final_Crontab.txt
+============================================
+
+Comandos usados practica 2
+
+udo hostnamectl set-hostname $([ "$(hostname -I | awk '{print $1}')" == "192.168.1.10" ] && echo "server1" || echo "server2")
+sudo sed -i '/server1\|server2/d' /etc/hosts
+echo -e "192.168.1.10 server1\n192.168.1.107 server2" | sudo tee -a /etc/hosts
+sudo apt update && sudo apt install pacemaker corosync crmsh -y
+
+
+sudo mkdir -p /etc/corosync
+sudo bash -c 'cat > /etc/corosync/corosync.conf <<EOF
+totem {
+    version: 2
+    cluster_name: cluster_ha
+    transport: udpu
+}
+nodelist {
+    node {
+        ring0_addr: 192.168.1.10
+        nodeid: 1
+    }
+    node {
+        ring0_addr: 192.168.1.107
+        nodeid: 2
+    }
+}
+quorum {
+    provider: corosync_votequorum
+    two_node: 1
+}
+EOF'
+
+sudo systemctl restart corosync
+sudo systemctl restart pacemaker
+
+sudo crm configure property stonith-enabled=false
+sudo crm configure property no-quorum-policy=ignore
+sudo crm configure primitive IP_Flotante ocf:heartbeat:IPaddr2 params ip="192.168.1.200" cidr_netmask="24" op monitor interval="30s"
+sudo crm status
+============================================
+
+Comandos usados practica 3
+
+sudo apt update && sudo apt install apache2 keepalived -y
+sudo a2dissite holamundo.conf datos.conf 2>/dev/null
+sudo a2ensite 000-default.conf
+
+
+echo "<h1>Servidor 1 - Jonathan Miguel Mejia Rochet (2025-2173)</h1>" | sudo tee /var/www/html/index.html
+IFACE=$(ip route | grep default | awk '{print $5}' | head -n1)
+cat <<EOF | sudo tee /etc/keepalived/keepalived.conf
+vrrp_instance VI_1 {
+    state MASTER
+    interface $IFACE
+    virtual_router_id 51
+    priority 101
+    advert_int 1
+    authentication { auth_type PASS; auth_pass 12345 }
+    virtual_ipaddress { 192.168.1.205 }
+}
+EOF
+
+sudo systemctl restart keepalived apache2
+============================================
