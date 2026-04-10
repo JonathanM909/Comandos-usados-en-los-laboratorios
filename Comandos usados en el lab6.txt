@@ -1,0 +1,44 @@
+Comandos usados practica 1
+sudo apt update && sudo apt install gnupg2 -y
+mkdir -p ~/practica_cifrado && cd ~/practica_cifrado
+echo "Documento confidencial - Jonathan Miguel Mejia Rochet" > secreto.txt
+gpg --batch --passphrase "kali2025" -c secreto.txt
+cat secreto.txt.gpg
+gpg --batch --passphrase "kali2025" -d secreto.txt.gpg
+============================================
+
+Comandos usados practica 2
+sudo apt install apache2 vsftpd openssh-server ufw -y
+sudo systemctl restart apache2 vsftpd ssh
+sudo iptables -A INPUT -p tcp -m multiport --dports 80,21,22 -j DROP
+sudo iptables -D INPUT -p tcp -m multiport --dports 80,21,22 -j DROP
+sudo ufw --force enable
+sudo ufw deny 80/tcp && sudo ufw deny 21/tcp && sudo ufw deny 22/tcp
+sudo ufw delete deny 80/tcp && sudo ufw delete deny 21/tcp && sudo ufw delete deny 22/tcp
+sudo ufw disable
+============================================
+
+Comandos usados practica 3
+sudo apt update && sudo apt install snort -y
+sudo mkdir -p /etc/snort/rules
+echo "ips = {}" | sudo tee /etc/snort/snort.lua
+
+sudo bash -c 'cat > /etc/snort/rules/local.rules <<EOF
+alert icmp any any -> any any (msg:"ALERTA: Trafico Ping (ICMP) Detectado"; sid:1000001; rev:1;)
+alert tcp any any -> any 21 (msg:"ALERTA: Intento de conexion FTP (Puerto 21)"; sid:1000002; rev:1;)
+alert tcp any any -> any 22 (msg:"ALERTA: Intento de conexion SSH (Puerto 22)"; sid:1000003; rev:1;)
+alert tcp any any -> any 80 (msg:"ALERTA: Trafico HTTP Web (Puerto 80)"; sid:1000004; rev:1;)
+EOF'
+
+IFACE=$(ip route | grep default | awk '{print $5}' | head -n1)
+sudo snort -c /etc/snort/snort.lua -R /etc/snort/rules/local.rules -i $IFACE -A alert_fast -q
+============================================
+
+Comandos usados practica 4
+sudo apt install libpam-google-authenticator -y
+google-authenticator -t -d -f -r 3 -R 30 -W
+echo "auth required pam_google_authenticator.so" | sudo tee -a /etc/pam.d/sshd
+sudo sed -i 's/^#*ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^#*KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl restart ssh
+============================================
