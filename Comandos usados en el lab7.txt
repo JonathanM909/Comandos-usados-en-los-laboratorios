@@ -1,0 +1,45 @@
+Comandos usados practica 1
+
+sudo apt update && sudo apt install nfs-kernel-server -y
+sudo mkdir -p /OS3
+sudo touch /OS3/Adrian{1..100}.txt
+sudo chown -R nobody:nogroup /OS3
+sudo chmod -R 777 /OS3
+echo "/OS3 *(rw,sync,no_subtree_check)" | sudo tee -a /etc/exports
+sudo exportfs -a
+sudo systemctl restart nfs-kernel-server
+sudo apt update && sudo apt install nfs-common -y
+sudo mkdir -p /mnt/OS3
+sudo mount 192.168.1.107:/OS3 /mnt/OS3
+echo "192.168.1.107:/OS3 /mnt/OS3 nfs defaults 0 0" | sudo tee -a /etc/fstab
+============================================
+
+Comandos usados practica 2
+sudo apt install samba smbclient -y
+sudo mkdir -p /samba_share
+sudo touch /samba_share/adrian{1..100}.txt
+sudo chmod -R 777 /samba_share
+sudo bash -c 'cat >> /etc/samba/smb.conf <<EOF
+[Carpeta_Compartida]
+   path = /samba_share
+   browsable = yes
+   read only = no
+   guest ok = yes
+EOF'
+sudo systemctl restart smbd nmbd
+============================================
+
+Comandos usados practica 3
+sudo systemctl stop smbd nmbd winbind
+sudo rm -rf /etc/samba/smb.conf /var/lib/samba/private/*
+sudo apt install samba-ad-dc samba-dsdb-modules samba-vfs-modules krb5-user winbind -y
+sudo samba-tool domain provision --use-rfc2307 --realm=SO3.INET --domain=SO3 --server-role=dc --dns-backend=SAMBA_INTERNAL --adminpass="Admin12345!
+sudo rm -f /etc/resolv.conf
+echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf
+echo "search SO3.inet" | sudo tee -a /etc/resolv.conf
+sudo systemctl mask smbd nmbd winbind
+sudo systemctl unmask samba-ad-dc
+sudo systemctl enable --now samba-ad-dc
+sudo samba-tool domain passwordsettings set --complexity=off
+sudo samba-tool user create lanegracubana 20252173
+============================================
