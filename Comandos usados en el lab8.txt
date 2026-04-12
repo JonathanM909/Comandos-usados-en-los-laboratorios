@@ -1,0 +1,49 @@
+Comandos usados practica 1
+sudo apt update && sudo apt install docker.io -y
+sudo systemctl enable --now docker
+sudo docker pull nginx
+sudo mkdir -p /home/website
+echo "<h1>Jonathan Miguel Mejia Rochet - 2025-2173</h1>" | sudo tee /home/website/index.html
+sudo docker run -d -p 8888:80 -v /home/website:/usr/share/nginx/html --name servidor_web nginx
+
+============================================
+
+Comandos usados practica 2
+sudo docker pull portainer/portainer-ce:latest
+sudo docker volume create portainer_data
+sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+
+============================================
+
+Comandos usados practica 3
+sudo apt install docker-compose -y
+mkdir ~/laboratorio_wordpress && cd ~/laboratorio_wordpress
+sudo bash -c 'cat > docker-compose.yml <<EOF
+services:
+  basededatos:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: superpassword123
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: jonathan
+      MYSQL_PASSWORD: mi_password_seguro
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8090:80"
+    environment:
+      WORDPRESS_DB_HOST: basededatos:3306
+      WORDPRESS_DB_USER: jonathan
+      WORDPRESS_DB_PASSWORD: mi_password_seguro
+      WORDPRESS_DB_NAME: wordpress_db
+    depends_on:
+      - basededatos
+volumes:
+  db_data:
+EOF'
+
+sudo docker-compose up -d
+============================================
